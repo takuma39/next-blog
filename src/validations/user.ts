@@ -19,3 +19,6 @@ export const registerSchema = z
     message: 'パスワードが一致しません',
     path: ['confirmPassword'], // エラーを表示するフィールドを指定
   })
+
+// 型の定義
+export type RegisterFormType = z.infer<typeof registerSchema>
