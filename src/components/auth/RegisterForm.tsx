@@ -5,7 +5,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createUser } from '@/lib/actions/createUser'
 import { useActionState, useState } from 'react'
-import { registerSchema } from '@/validations/user'
+import { baseRegisterSchema } from '@/validations/user'
+import { z } from 'zod'
 
 export default function RegisterForm() {
   const [state, formAction] = useActionState(createUser, {
@@ -13,20 +14,37 @@ export default function RegisterForm() {
     errors: {},
   })
 
-  const [clientErrors, setClientErrors] = useState<Record<string, string>>({})
+  const [clientErrors, setClientErrors] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  })
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    const result = registerSchema.safeParse({ [name]: value })
-
-    if (!result.success) {
-      const fieldError = result.error.errors.find((err) => err.path.includes(name))
-      setClientErrors((prev) => ({
-        ...prev,
-        [name]: fieldError ? fieldError.message : '',
-      }))
+    try {
+      switch (name) {
+        case 'name':
+          baseRegisterSchema.pick({ name: true }).parse({ name: value })
+          break
+        case 'email':
+          baseRegisterSchema.pick({ email: true }).parse({ email: value })
+          break
+        case 'password':
+          baseRegisterSchema.pick({ password: true }).parse({ password: value })
+          break
+        case 'confirmPassword':
+          baseRegisterSchema.pick({ confirmPassword: true }).parse({ confirmPassword: value })
+          break
+      }
+      setClientErrors((prev) => ({ ...prev, [name]: '' }))
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const errorMessage = error.errors[0]?.message || ''
+        setClientErrors((prev) => ({ ...prev, [name]: errorMessage }))
+      }
     }
-    return
   }
 
   return (
