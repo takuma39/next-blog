@@ -8,38 +8,35 @@ async function main() {
   await prisma.post.deleteMany()
   await prisma.user.deleteMany()
 
-  const hashedPassword = await bycrpt.hash('password', 12)
+  const hashedPassword1 = await bycrpt.hash('password', 12)
+  const hashedPassword2 = await bycrpt.hash('password', 12)
 
   // ダミー画像URL
   const dummyImages = [
     'https://picsum.photos/seed/post1/600/400',
     'https://picsum.photos/seed/post2/600/400',
+    'https://picsum.photos/seed/post3/600/400',
+    'https://picsum.photos/seed/post4/600/400',
   ]
 
-  // ユーザー作成
-  const user = await prisma.user.create({
+  // ユーザー1作成
+  const user1 = await prisma.user.create({
     data: {
-      email: 'test@example.com',
-      name: 'Test User',
-      password: hashedPassword,
+      email: 'test1@test.com',
+      name: 'Test User 1',
+      password: hashedPassword1,
       posts: {
         create: [
           {
-            title: '初めてのブログ投稿',
-            content: 'これは最初のブログ投稿です。',
+            title: 'ユーザー1の最初の投稿',
+            content: 'これはユーザー1の最初の投稿です。',
             topImage: dummyImages[0],
             published: true,
           },
           {
-            title: '2番目の投稿',
-            content: 'これは2つ目のブログ投稿です。',
+            title: 'ユーザー1の2番目の投稿',
+            content: 'これはユーザー1の2番目の投稿です。',
             topImage: dummyImages[1],
-            published: true,
-          },
-          {
-            title: '3番目の投稿',
-            content: 'これは3つ目のブログ投稿です。',
-            topImage: '',
             published: true,
           },
         ],
@@ -47,7 +44,32 @@ async function main() {
     },
   })
 
-  console.log({ user })
+  // ユーザー2作成
+  const user2 = await prisma.user.create({
+    data: {
+      email: 'test2@test.com',
+      name: 'Test User 2',
+      password: hashedPassword2,
+      posts: {
+        create: [
+          {
+            title: 'ユーザー2の最初の投稿',
+            content: 'これはユーザー2の最初の投稿です。',
+            topImage: dummyImages[2],
+            published: true,
+          },
+          {
+            title: 'ユーザー2の2番目の投稿',
+            content: 'これはユーザー2の2番目の投稿です。',
+            topImage: dummyImages[3],
+            published: true,
+          },
+        ],
+      },
+    },
+  })
+
+  console.log({ user1, user2 })
 }
 
 main()
