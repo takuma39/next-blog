@@ -1,14 +1,14 @@
 'use client'
-import { useState, useActionState } from 'react'
-import { createPost } from '@/lib/actions/createPost'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import rehypeHighlight from 'rehype-highlight'
-import TextareaAutosize from 'react-textarea-autosize'
-import 'highlight.js/styles/github.css' // コードハイライト用のスタイル
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { createPost } from '@/lib/actions/createPost'
+import 'highlight.js/styles/github.css' // コードハイライト用のスタイル
+import { useActionState, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import TextareaAutosize from 'react-textarea-autosize'
+import rehypeHighlight from 'rehype-highlight'
+import remarkGfm from 'remark-gfm'
 
 export default function CreatePage() {
   const [content, setContent] = useState('')
