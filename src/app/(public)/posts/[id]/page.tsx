@@ -1,9 +1,13 @@
-import { notFound } from 'next/navigation'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getPost } from '@/lib/post'
-import Image from 'next/image'
 import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import 'highlight.js/styles/github.css' // コードハイライト用のスタイル
+import Image from 'next/image'
+import { notFound } from 'next/navigation'
+import ReactMarkdown from 'react-markdown'
+import rehypeHighlight from 'rehype-highlight'
+import remarkGfm from 'remark-gfm'
 
 type Params = {
   params: Promise<{ id: string }>
@@ -43,7 +47,14 @@ export default async function PostPage({ params }: Params) {
         </CardHeader>
         <CardContent>
           <div className="prose max-w-none">
-            <p>{post.content}</p>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeHighlight]}
+              skipHtml={false} // HTMLスキップを無効化
+              unwrapDisallowed={true} // Markdownの改行を解釈
+            >
+              {post.content}
+            </ReactMarkdown>
           </div>
         </CardContent>
       </Card>
